@@ -1,0 +1,110 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import SimpleITK as sitk\n",
+    "import os"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def listdir_nohidden(path):\n",
+    "    myList = []\n",
+    "    for f in os.listdir(path):\n",
+    "        if not f.startswith('.'):\n",
+    "            myList.append(f)\n",
+    "    return myList      "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['testing_part2', 'testing_part1', 'training']"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "base_address = r\"\\\\neptune.radsci.uci.edu\\NeptuneData\\Datasets\\Rotterdam\"\n",
+    "train_test_dire_list = listdir_nohidden(base_address)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for data_directory in train_test_dire_list:\n",
+    "    first_address = base_address+ \"\\\\\"+ data_directory\n",
+    "    for data in listdir_nohidden(first_address):\n",
+    "        second_address = first_address + \"\\\\\" + data\n",
+    "        for file in listdir_nohidden(second_address):\n",
+    "            if file.endswith(\".mhd\"):\n",
+    "                try:\n",
+    "                    img = sitk.ReadImage(second_address + \"\\\\\" + file)\n",
+    "                    sitk.WriteImage(img,second_address + \"\\\\\" + file.split(\".\")[0] + \".nii\")\n",
+    "                except:\n",
+    "                    pass\n",
+    "                "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "# testing part\n",
+    "img = sitk.ReadImage(r\"\\\\neptune.radsci.uci.edu\\NeptuneData\\Datasets\\Rotterdam\\testing_part2\\dataset20\\image20.mhd\")\n",
+    "sitk.WriteImage(img, \"output.nii\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
